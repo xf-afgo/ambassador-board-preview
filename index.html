@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>校园推广大使排行榜（评审版） · AsterFire Go</title>
 <meta name="theme-color" content="#1B2FD6">
-<script>window.__DEMO_ONLY__=true;window.__BOARD_SNAPSHOT__={"generated_at": "2026-11-24T21:39:26+08:00", "today": "2026-11-24", "campaign_title": "2026 秋季", "start_date": "2026-11-24", "periods": {}, "rules": {"reg_reward": 5, "feedback_reward": 15, "commission_rate": 0.1, "feedback_window_days": 7, "pay_window_days": 30, "levels": [{"key": "excellent", "name": "优秀", "regs": 50, "payers": 5}, {"key": "qualified", "name": "合格", "regs": 20, "payers": 2}, {"key": "improve", "name": "待提升", "regs": 10, "payers": 1}, {"key": "inactive", "name": "不活跃", "regs": 0, "payers": 0}]}, "visits_ok": true, "unregistered_regs": 0, "ambassadors": [{"code": "r1", "name": "林晓川", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r2", "name": "苏雨辰", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r3", "name": "许嘉禾", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r4", "name": "宋知远", "school": "", "link": "https://sidereus-ai.com/login"}], "stats": {}, "daily": {"dates": ["2026-11-24"], "series": {}}, "_meCode": "r3"};</script>
+<script>window.__DEMO_ONLY__=true;window.__BOARD_SNAPSHOT__={"generated_at": "2026-11-24T21:42:07+08:00", "today": "2026-11-24", "campaign_title": "2026 秋季", "start_date": "2026-11-24", "periods": {}, "rules": {"reg_reward": 5, "feedback_reward": 15, "commission_rate": 0.1, "feedback_window_days": 7, "pay_window_days": 30, "levels": [{"key": "excellent", "name": "优秀", "regs": 50, "payers": 5}, {"key": "qualified", "name": "合格", "regs": 20, "payers": 2}, {"key": "improve", "name": "待提升", "regs": 10, "payers": 1}, {"key": "inactive", "name": "不活跃", "regs": 0, "payers": 0}]}, "visits_ok": true, "unregistered_regs": 0, "ambassadors": [{"code": "r1", "name": "林晓川", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r2", "name": "苏雨辰", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r3", "name": "许嘉禾", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r4", "name": "宋知远", "school": "", "link": "https://sidereus-ai.com/login"}], "stats": {}, "daily": {"dates": ["2026-11-24"], "series": {}}, "_meCode": "r3"};</script>
 <style>
 /* 字号 11/12/13/14/16/20/30（标题 32）；字重 400/500/600；圆角 16/10/6 */
 :root{
@@ -718,6 +718,9 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
     const before = {}, byCode = {};
     rowsEl.querySelectorAll('.row').forEach(r => { byCode[r.dataset.code] = r; if (!r.hidden) before[r.dataset.code] = r.getBoundingClientRect().top; });
     rowsEl.querySelectorAll(':scope > :not(.row)').forEach(n => n.remove());
+    // 换了一批人（比如切演示数据）时，清掉已不在名单里的行
+    const codes = new Set(list.map(r => r.code));
+    rowsEl.querySelectorAll('.row').forEach(r => { if (!codes.has(r.dataset.code)) { r.remove(); delete byCode[r.dataset.code]; } });
     list.forEach((r, i) => {
       let el = byCode[r.code];
       if (!el) {
