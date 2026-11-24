@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>校园推广大使排行榜（评审版） · AsterFire Go</title>
 <meta name="theme-color" content="#1B2FD6">
-<script>window.__DEMO_ONLY__=true;window.__BOARD_SNAPSHOT__={"generated_at": "2026-11-24T23:09:49+08:00", "today": "2026-11-24", "campaign_title": "2026 秋季", "start_date": "2026-11-24", "periods": {}, "rules": {"reg_reward": 5, "feedback_reward": 15, "commission_rate": 0.1, "feedback_window_days": 7, "pay_window_days": 30, "levels": [{"key": "excellent", "name": "优秀", "regs": 50, "payers": 5}, {"key": "qualified", "name": "合格", "regs": 20, "payers": 2}, {"key": "improve", "name": "待提升", "regs": 10, "payers": 1}, {"key": "inactive", "name": "不活跃", "regs": 0, "payers": 0}]}, "visits_ok": true, "unregistered_regs": 0, "ambassadors": [{"code": "r1", "name": "林晓川", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r2", "name": "苏雨辰", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r3", "name": "许嘉禾", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r4", "name": "宋知远", "school": "", "link": "https://sidereus-ai.com/login"}], "stats": {}, "daily": {"dates": ["2026-11-24"], "series": {}}, "_meCode": "r3"};</script>
+<script>window.__DEMO_ONLY__=true;window.__BOARD_SNAPSHOT__={"generated_at": "2026-11-24T23:25:24+08:00", "today": "2026-11-24", "campaign_title": "2026 秋季", "start_date": "2026-11-24", "periods": {}, "rules": {"reg_reward": 5, "feedback_reward": 15, "commission_rate": 0.1, "feedback_window_days": 7, "pay_window_days": 30, "levels": [{"key": "excellent", "name": "优秀", "regs": 50, "payers": 5}, {"key": "qualified", "name": "合格", "regs": 20, "payers": 2}, {"key": "improve", "name": "待提升", "regs": 10, "payers": 1}, {"key": "inactive", "name": "不活跃", "regs": 0, "payers": 0}]}, "visits_ok": true, "unregistered_regs": 0, "ambassadors": [{"code": "r1", "name": "林晓川", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r2", "name": "苏雨辰", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r3", "name": "许嘉禾", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r4", "name": "宋知远", "school": "", "link": "https://sidereus-ai.com/login"}], "stats": {}, "daily": {"dates": ["2026-11-24"], "series": {}}, "_meCode": "r3"};</script>
 <style>
 /* 字号 11/12/13/14/16/20/30（标题 32）；字重 400/500/600；圆角 16/10/6 */
 :root{
@@ -281,6 +281,8 @@ main.wrap{position:relative;margin-top:-58px;padding-bottom:40px}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
 .legend i.line{height:0;border-top:2px dashed var(--ink-3);border-radius:0;width:14px}
 .chart-box{display:flex;align-items:flex-start}
+.chart-box,.legend,#chartTitle{transition:opacity .22s var(--ease),filter .22s var(--ease)}
+.chart-swap .chart-box,.chart-swap .legend,.chart-swap #chartTitle{opacity:.2;filter:blur(6px)}
 svg.chart-y{flex:none;display:block;height:200px;overflow:visible}
 /* 超过 30 天时左右滑；高度留出滚动条的位置，能滑和不能滑时排版一样 */
 .chart-scroll{flex:1;min-width:0;height:210px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
@@ -895,6 +897,27 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
   }
 
   /* ---------- 每日趋势（四种指标可切换） ---------- */
+  function placeMseg(){
+    $$('#mseg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.m === S.chart));
+    const mseg = $('#mseg'), mb = mseg.querySelector(`[data-m="${S.chart}"]`), mt = mseg.querySelector('.thumb');
+    if (mb.offsetWidth) {
+      const br = mb.getBoundingClientRect(), sr = mseg.getBoundingClientRect(), first = !mt.style.width;
+      if (first) mt.style.transition = 'none';   // 第一次直接放到位，不从左边滑进来
+      mt.style.width = br.width + 'px';
+      mt.style.transform = `translateX(${br.left - sr.left - mseg.clientLeft}px)`;
+      if (first) { mt.offsetWidth; mt.style.transition = ''; }
+    }
+  }
+  // 换指标、换时间段、换人时：图先模糊淡出，换好再清晰淡入，不直接闪切
+  let swapT;
+  function swapChart(){
+    const card = $('#trendCard');
+    $('#tip').classList.remove('show');
+    if (reduce || card.hidden) { renderChart(); return; }
+    card.classList.add('chart-swap');
+    clearTimeout(swapT);
+    swapT = setTimeout(() => { renderChart(); requestAnimationFrame(() => card.classList.remove('chart-swap')); }, 160);
+  }
   // 某位大使某天某指标的数；收益按规则由拉新、问卷、充值算出
   function dayVal(c, i){
     const sr = S.data.daily.series[c], R = S.data.rules;
@@ -976,15 +999,7 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
     const cm = CM[S.chart];
     $('#chartTitle').textContent = `每日${cm.label} · ${cm.unit}`;
     svg.setAttribute('aria-label', `每日${cm.label}`);
-    $$('#mseg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.m === S.chart));
-    const mseg = $('#mseg'), mb = mseg.querySelector(`[data-m="${S.chart}"]`), mt = mseg.querySelector('.thumb');
-    if (mb.offsetWidth) {
-      const br = mb.getBoundingClientRect(), sr = mseg.getBoundingClientRect(), first = !mt.style.width;
-      if (first) mt.style.transition = 'none';   // 第一次直接放到位，不从左边滑进来
-      mt.style.width = br.width + 'px';
-      mt.style.transform = `translateX(${br.left - sr.left - mseg.clientLeft}px)`;
-      if (first) { mt.offsetWidth; mt.style.transition = ''; }
-    }
+    placeMseg();
     $('#legend').innerHTML = hasMe ? `<span><i style="background:#2F4AF1"></i>我</span>${n > 1 ? '<span><i class="line"></i>大使人均</span>' : ''}` : `<span><i style="background:#2F4AF1"></i>全体大使</span>`;
     const tip = $('#tip'), wrap = $('#chartWrap');
     let hideT;
@@ -1055,7 +1070,7 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
     if (S.me) u.searchParams.set('me', S.me); else u.searchParams.delete('me');
     history.replaceState(null, '', u);
     $('#meCard').innerHTML = '';
-    renderMe(); renderBoard(); renderChart();
+    renderMe(); renderBoard(); swapChart();
   }
   function closePick(){
     const pop = $('#pickPop'), pbtn = $('#mePickBtn');
@@ -1095,7 +1110,7 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
     if (p === S.period) return;
     S.period = p; store.set('amb.period', p);
     $('#tip').classList.remove('show');
-    placeSegs(); renderMe(); renderBoard(); renderChart();
+    placeSegs(); renderMe(); renderBoard(); swapChart();
   }
   $$('[data-seg]').forEach(seg => seg.addEventListener('click', e => { const b = e.target.closest('button'); if (b) setPeriod(b.dataset.p); }));
   $('#tabs').addEventListener('click', e => {
@@ -1111,8 +1126,7 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
   $('#mseg').addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b || b.dataset.m === S.chart) return;
     S.chart = b.dataset.m; store.set('amb.chart', S.chart);
-    $('#tip').classList.remove('show');
-    renderChart();
+    placeMseg(); swapChart();
   });
   $('#moreBtn').addEventListener('click', () => {
     const btn = $('#moreBtn'), top = btn.getBoundingClientRect().top;
