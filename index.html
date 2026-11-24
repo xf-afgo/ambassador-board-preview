@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>校园推广大使排行榜（评审版） · AsterFire Go</title>
 <meta name="theme-color" content="#1B2FD6">
-<script>window.__DEMO_ONLY__=true;window.__BOARD_SNAPSHOT__={"generated_at": "2026-11-24T22:40:48+08:00", "today": "2026-11-24", "campaign_title": "2026 秋季", "start_date": "2026-11-24", "periods": {}, "rules": {"reg_reward": 5, "feedback_reward": 15, "commission_rate": 0.1, "feedback_window_days": 7, "pay_window_days": 30, "levels": [{"key": "excellent", "name": "优秀", "regs": 50, "payers": 5}, {"key": "qualified", "name": "合格", "regs": 20, "payers": 2}, {"key": "improve", "name": "待提升", "regs": 10, "payers": 1}, {"key": "inactive", "name": "不活跃", "regs": 0, "payers": 0}]}, "visits_ok": true, "unregistered_regs": 0, "ambassadors": [{"code": "r1", "name": "林晓川", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r2", "name": "苏雨辰", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r3", "name": "许嘉禾", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r4", "name": "宋知远", "school": "", "link": "https://sidereus-ai.com/login"}], "stats": {}, "daily": {"dates": ["2026-11-24"], "series": {}}, "_meCode": "r3"};</script>
+<script>window.__DEMO_ONLY__=true;window.__BOARD_SNAPSHOT__={"generated_at": "2026-11-24T23:01:06+08:00", "today": "2026-11-24", "campaign_title": "2026 秋季", "start_date": "2026-11-24", "periods": {}, "rules": {"reg_reward": 5, "feedback_reward": 15, "commission_rate": 0.1, "feedback_window_days": 7, "pay_window_days": 30, "levels": [{"key": "excellent", "name": "优秀", "regs": 50, "payers": 5}, {"key": "qualified", "name": "合格", "regs": 20, "payers": 2}, {"key": "improve", "name": "待提升", "regs": 10, "payers": 1}, {"key": "inactive", "name": "不活跃", "regs": 0, "payers": 0}]}, "visits_ok": true, "unregistered_regs": 0, "ambassadors": [{"code": "r1", "name": "林晓川", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r2", "name": "苏雨辰", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r3", "name": "许嘉禾", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r4", "name": "宋知远", "school": "", "link": "https://sidereus-ai.com/login"}], "stats": {}, "daily": {"dates": ["2026-11-24"], "series": {}}, "_meCode": "r3"};</script>
 <style>
 /* 字号 11/12/13/14/16/20/30（标题 32）；字重 400/500/600；圆角 16/10/6 */
 :root{
@@ -897,25 +897,26 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
     const d = S.data, svg = $('#chart'), W = svg.clientWidth || 800, H = 200;
     const pad = {l:30, r:0, t:14, b:24};   // l 在算出刻度后按数字宽度重设
     const dates = d.daily.dates, codes = d.ambassadors.map(a => a.code), n = codes.length;
-    const narrow = W < 560, maxSlots = narrow ? 14 : 30;
     const hasMe = !!(S.me && d.daily.series[S.me]);
-    // 活动不满 7 天时，右侧补到第 7 天（未来的日子不画柱）
-    const [y0, m0, d0] = dates[0].split('-').map(Number);
-    const days = Math.max(7, dates.length);
-    let all = [];
-    for (let i = 0; i < days; i++) {
-      const iso = new Date(Date.UTC(y0, m0 - 1, d0 + i)).toISOString().slice(0, 10);
-      if (i >= dates.length) { all.push({date:iso, future:true}); continue; }
+    // 跟着上面的时间切换：近 7 天 / 本月 / 累计。不足 7 天时右侧补到第 7 天（未来的日子不画柱）；
+    // 活动开始前的日子也不画柱、不能悬停
+    const utc = iso => { const [yy, mm, dd] = iso.split('-').map(Number); return Date.UTC(yy, mm - 1, dd); };
+    const DAY = 864e5, from = utc(d.periods[S.period].from), today = utc(d.today), start = utc(dates[0]);
+    const slots = Math.max(7, Math.round((today - from) / DAY) + 1);
+    const all = [];
+    for (let k = 0; k < slots; k++) {
+      const t = from + k * DAY, iso = new Date(t).toISOString().slice(0, 10), i = Math.round((t - start) / DAY);
+      if (t > today) { all.push({date:iso, off:true}); continue; }
+      if (i < 0 || i >= dates.length) { all.push({date:iso, off:true}); continue; }
       const total = codes.reduce((a, c) => a + dayVal(c, i), 0);
       all.push({date:iso, total, me: hasMe ? dayVal(S.me, i) : 0, avg: total / n});
     }
-    all = all.slice(-maxSlots);
-    const vals = all.filter(x => !x.future).map(x => hasMe ? Math.max(x.me, x.avg) : x.total);
+    const vals = all.filter(x => !x.off).map(x => hasMe ? Math.max(x.me, x.avg) : x.total);
     const nice = niceMax(Math.max(0, ...vals));
     const ctx = (renderChart.c = renderChart.c || document.createElement('canvas')).getContext('2d');
     ctx.font = `11px ${getComputedStyle(document.documentElement).getPropertyValue('--num')}`;
     pad.l = Math.max(...[0, nice / 2, nice].map(v => ctx.measureText(fmtInt(v)).width)) + 8;
-    const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b, bw = iw / all.length, barW = Math.max(4, Math.min(26, bw * .6));
+    const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b, bw = iw / all.length, barW = Math.max(1.5, Math.min(26, bw * .6));
     const y = v => pad.t + ih - v / nice * ih;
     let g = '';
     [0, .5, 1].forEach(k => {
@@ -927,16 +928,16 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
     const every = Math.max(1, Math.ceil(all.length * 40 / iw));
     let avgPath = '';
     all.forEach((x, i) => {
-      const cx = pad.l + bw * i + bw / 2, x0 = cx - barW / 2, v = x.future ? 0 : (hasMe ? x.me : x.total);
+      const cx = pad.l + bw * i + bw / 2, x0 = cx - barW / 2, v = x.off ? 0 : (hasMe ? x.me : x.total);
       if (v > 0) {
         const y1 = y(v), h = pad.t + ih - y1, r = Math.min(4, barW / 2, h);
         g += `<path d="M${x0},${y1 + h} V${y1 + r} Q${x0},${y1} ${x0 + r},${y1} H${x0 + barW - r} Q${x0 + barW},${y1} ${x0 + barW},${y1 + r} V${y1 + h} Z" fill="#2F4AF1"/>`;
       }
-      if (hasMe && n > 1 && !x.future) avgPath += `${avgPath ? 'L' : 'M'}${cx},${y(x.avg)}`;
+      if (hasMe && n > 1 && !x.off) avgPath += `${avgPath ? 'L' : 'M'}${cx},${y(x.avg)}`;
       const isToday = i === todayIdx;
       if (isToday || (i % every === 0 && Math.abs(i - todayIdx) >= every) || (todayIdx < 0 && i === all.length - 1))
-        g += `<text x="${cx}" y="${H - 6}" text-anchor="middle" style="${isToday ? 'fill:#0E1330;font-weight:600' : x.future ? 'fill:#B7BBD0' : ''}">${isToday ? '今天' : md(x.date)}</text>`;
-      if (!x.future) g += `<rect class="hit" data-i="${i}" x="${pad.l + bw * i}" y="${pad.t}" width="${bw}" height="${ih}" fill="transparent"/>`;
+        g += `<text x="${cx}" y="${H - 6}" text-anchor="middle" style="${isToday ? 'fill:#0E1330;font-weight:600' : x.off ? 'fill:#B7BBD0' : ''}">${isToday ? '今天' : md(x.date)}</text>`;
+      if (!x.off) g += `<rect class="hit" data-i="${i}" x="${pad.l + bw * i}" y="${pad.t}" width="${bw}" height="${ih}" fill="transparent"/>`;
     });
     if (avgPath) g += `<path d="${avgPath}" fill="none" stroke="#6F7594" stroke-width="1.5" stroke-dasharray="4 4" pointer-events="none"/>`;
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -1040,7 +1041,8 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
   function setPeriod(p){
     if (p === S.period) return;
     S.period = p; store.set('amb.period', p);
-    placeSegs(); renderMe(); renderBoard();
+    $('#tip').classList.remove('show');
+    placeSegs(); renderMe(); renderBoard(); renderChart();
   }
   $$('[data-seg]').forEach(seg => seg.addEventListener('click', e => { const b = e.target.closest('button'); if (b) setPeriod(b.dataset.p); }));
   $('#tabs').addEventListener('click', e => {
