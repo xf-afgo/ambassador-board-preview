@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>校园推广大使排行榜（评审版） · AsterFire Go</title>
 <meta name="theme-color" content="#1B2FD6">
-<script>window.__DEMO_ONLY__=true;window.__BOARD_SNAPSHOT__={"generated_at": "2026-11-24T23:01:06+08:00", "today": "2026-11-24", "campaign_title": "2026 秋季", "start_date": "2026-11-24", "periods": {}, "rules": {"reg_reward": 5, "feedback_reward": 15, "commission_rate": 0.1, "feedback_window_days": 7, "pay_window_days": 30, "levels": [{"key": "excellent", "name": "优秀", "regs": 50, "payers": 5}, {"key": "qualified", "name": "合格", "regs": 20, "payers": 2}, {"key": "improve", "name": "待提升", "regs": 10, "payers": 1}, {"key": "inactive", "name": "不活跃", "regs": 0, "payers": 0}]}, "visits_ok": true, "unregistered_regs": 0, "ambassadors": [{"code": "r1", "name": "林晓川", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r2", "name": "苏雨辰", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r3", "name": "许嘉禾", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r4", "name": "宋知远", "school": "", "link": "https://sidereus-ai.com/login"}], "stats": {}, "daily": {"dates": ["2026-11-24"], "series": {}}, "_meCode": "r3"};</script>
+<script>window.__DEMO_ONLY__=true;window.__BOARD_SNAPSHOT__={"generated_at": "2026-11-24T23:09:49+08:00", "today": "2026-11-24", "campaign_title": "2026 秋季", "start_date": "2026-11-24", "periods": {}, "rules": {"reg_reward": 5, "feedback_reward": 15, "commission_rate": 0.1, "feedback_window_days": 7, "pay_window_days": 30, "levels": [{"key": "excellent", "name": "优秀", "regs": 50, "payers": 5}, {"key": "qualified", "name": "合格", "regs": 20, "payers": 2}, {"key": "improve", "name": "待提升", "regs": 10, "payers": 1}, {"key": "inactive", "name": "不活跃", "regs": 0, "payers": 0}]}, "visits_ok": true, "unregistered_regs": 0, "ambassadors": [{"code": "r1", "name": "林晓川", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r2", "name": "苏雨辰", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r3", "name": "许嘉禾", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r4", "name": "宋知远", "school": "", "link": "https://sidereus-ai.com/login"}], "stats": {}, "daily": {"dates": ["2026-11-24"], "series": {}}, "_meCode": "r3"};</script>
 <style>
 /* 字号 11/12/13/14/16/20/30（标题 32）；字重 400/500/600；圆角 16/10/6 */
 :root{
@@ -280,8 +280,20 @@ main.wrap{position:relative;margin-top:-58px;padding-bottom:40px}
 .legend span{display:inline-flex;align-items:center}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
 .legend i.line{height:0;border-top:2px dashed var(--ink-3);border-radius:0;width:14px}
-svg.chart{display:block;width:100%;height:200px;overflow:visible}
-svg.chart text{font-size:11px;fill:var(--ink-3);font-family:var(--num)}
+.chart-box{display:flex;align-items:flex-start}
+svg.chart-y{flex:none;display:block;height:200px;overflow:visible}
+/* 超过 30 天时左右滑；高度留出滚动条的位置，能滑和不能滑时排版一样 */
+.chart-scroll{flex:1;min-width:0;height:210px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.chart-scroll::-webkit-scrollbar{height:6px}
+.chart-scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+.chart-scroll::-webkit-scrollbar-thumb:hover{background:var(--ink-4)}
+.chart-scroll.can{cursor:grab}
+.chart-scroll.drag{cursor:grabbing;user-select:none}
+.chart-scroll.l{-webkit-mask-image:linear-gradient(90deg,transparent,#000 28px);mask-image:linear-gradient(90deg,transparent,#000 28px)}
+.chart-scroll.r{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent)}
+.chart-scroll.l.r{-webkit-mask-image:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 28px),transparent)}
+svg.chart{display:block;height:200px;overflow:visible}
+svg.chart text,svg.chart-y text{font-size:11px;fill:var(--ink-3);font-family:var(--num)}
 .tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;border-radius:var(--r-md);padding:7px 10px;font-size:12px;line-height:1.6;left:0;top:0;
   opacity:0;transform:translateY(4px);transition:opacity .15s var(--ease),transform .15s var(--ease);white-space:nowrap;z-index:5}
 .tip.show{opacity:1;transform:none}
@@ -486,7 +498,10 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
       <div class="mseg" id="mseg" role="group" aria-label="图表指标"><span class="thumb" aria-hidden="true"></span><button data-m="regs">拉新</button><button data-m="feedback">反馈</button><button data-m="payers">付费</button><button data-m="earnings">收益</button></div></div>
     <div class="chart-wrap" id="chartWrap">
       <div class="legend" id="legend"></div>
-      <svg class="chart" id="chart" role="img" aria-label="每日有效拉新人数"></svg>
+      <div class="chart-box">
+        <svg class="chart-y" id="chartY" aria-hidden="true"></svg>
+        <div class="chart-scroll" id="chartScroll"><svg class="chart" id="chart" role="img" aria-label="每日有效拉新人数"></svg></div>
+      </div>
       <div class="tip" id="tip"></div>
     </div>
   </section>
@@ -894,7 +909,7 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
     return Math.ceil(v / 1000) * 1000;
   }
   function renderChart(){
-    const d = S.data, svg = $('#chart'), W = svg.clientWidth || 800, H = 200;
+    const d = S.data, svg = $('#chart'), svgY = $('#chartY'), box = $('#chartScroll'), H = 200;
     const pad = {l:30, r:0, t:14, b:24};   // l 在算出刻度后按数字宽度重设
     const dates = d.daily.dates, codes = d.ambassadors.map(a => a.code), n = codes.length;
     const hasMe = !!(S.me && d.daily.series[S.me]);
@@ -916,19 +931,23 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
     const ctx = (renderChart.c = renderChart.c || document.createElement('canvas')).getContext('2d');
     ctx.font = `11px ${getComputedStyle(document.documentElement).getPropertyValue('--num')}`;
     pad.l = Math.max(...[0, nice / 2, nice].map(v => ctx.measureText(fmtInt(v)).width)) + 8;
-    const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b, bw = iw / all.length, barW = Math.max(1.5, Math.min(26, bw * .6));
+    // 一屏最多 30 天；超过就固定每天的宽度，柱子区域左右滑
+    const VISIBLE = 30, boxW = (box.parentElement.clientWidth || 800) - pad.l;
+    const bw = boxW / Math.min(all.length, VISIBLE), PW = bw * all.length;
+    const ih = H - pad.t - pad.b, barW = Math.max(1.5, Math.min(26, bw * .6));
     const y = v => pad.t + ih - v / nice * ih;
-    let g = '';
+    let g = '', gy = '';
     [0, .5, 1].forEach(k => {
       const v = nice * k, yy = y(v);
-      g += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${yy}" y2="${yy}" stroke="${k ? '#F0F1F7' : '#E7E9F3'}"/>`;
-      g += `<text x="${pad.l - 8}" y="${yy + 3.5}" text-anchor="end">${fmtInt(v)}</text>`;
+      g += `<line x1="0" x2="${PW}" y1="${yy}" y2="${yy}" stroke="${k ? '#F0F1F7' : '#E7E9F3'}"/>`;
+      gy += `<text x="${pad.l - 8}" y="${yy + 3.5}" text-anchor="end">${fmtInt(v)}</text>`;
     });
+    svgY.setAttribute('width', pad.l); svgY.setAttribute('viewBox', `0 0 ${pad.l} ${H}`); svgY.innerHTML = gy;
     const todayIdx = all.findIndex(x => x.date === d.today);
-    const every = Math.max(1, Math.ceil(all.length * 40 / iw));
+    const every = Math.max(1, Math.ceil(40 / bw));
     let avgPath = '';
     all.forEach((x, i) => {
-      const cx = pad.l + bw * i + bw / 2, x0 = cx - barW / 2, v = x.off ? 0 : (hasMe ? x.me : x.total);
+      const cx = bw * i + bw / 2, x0 = cx - barW / 2, v = x.off ? 0 : (hasMe ? x.me : x.total);
       if (v > 0) {
         const y1 = y(v), h = pad.t + ih - y1, r = Math.min(4, barW / 2, h);
         g += `<path d="M${x0},${y1 + h} V${y1 + r} Q${x0},${y1} ${x0 + r},${y1} H${x0 + barW - r} Q${x0 + barW},${y1} ${x0 + barW},${y1 + r} V${y1 + h} Z" fill="#2F4AF1"/>`;
@@ -936,12 +955,24 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
       if (hasMe && n > 1 && !x.off) avgPath += `${avgPath ? 'L' : 'M'}${cx},${y(x.avg)}`;
       const isToday = i === todayIdx;
       if (isToday || (i % every === 0 && Math.abs(i - todayIdx) >= every) || (todayIdx < 0 && i === all.length - 1))
-        g += `<text x="${cx}" y="${H - 6}" text-anchor="middle" style="${isToday ? 'fill:#0E1330;font-weight:600' : x.off ? 'fill:#B7BBD0' : ''}">${isToday ? '今天' : md(x.date)}</text>`;
-      if (!x.off) g += `<rect class="hit" data-i="${i}" x="${pad.l + bw * i}" y="${pad.t}" width="${bw}" height="${ih}" fill="transparent"/>`;
+      {
+        // 标签不超出图的左右边缘：靠边的改成贴边对齐
+        const txt = isToday ? '今天' : md(x.date), tw = ctx.measureText(txt).width;
+        let tx = cx, anchor = 'middle';
+        if (cx + tw / 2 > PW) { tx = PW; anchor = 'end'; } else if (cx - tw / 2 < 0) { tx = 0; anchor = 'start'; }
+        g += `<text x="${tx}" y="${H - 6}" text-anchor="${anchor}" style="${isToday ? 'fill:#0E1330;font-weight:600' : x.off ? 'fill:#B7BBD0' : ''}">${txt}</text>`;
+      }
+      if (!x.off) g += `<rect class="hit" data-i="${i}" x="${bw * i}" y="${pad.t}" width="${bw}" height="${ih}" fill="transparent"/>`;
     });
     if (avgPath) g += `<path d="${avgPath}" fill="none" stroke="#6F7594" stroke-width="1.5" stroke-dasharray="4 4" pointer-events="none"/>`;
-    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.setAttribute('viewBox', `0 0 ${PW} ${H}`);
+    svg.style.width = PW + 'px';
     svg.innerHTML = g;
+    // 换了时间段（或第一次画）时停到最右边的今天；数据刷新、窗口变化时保持原位置
+    const key = `${S.period}|${all.length}|${d.today}`;
+    if (renderChart.key !== key) { box.scrollLeft = box.scrollWidth; renderChart.key = key; }
+    box.classList.toggle('can', PW > boxW + 1);
+    chartEdges();
     const cm = CM[S.chart];
     $('#chartTitle').textContent = `每日${cm.label} · ${cm.unit}`;
     svg.setAttribute('aria-label', `每日${cm.label}`);
@@ -983,6 +1014,28 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
     });
   }
   document.addEventListener('touchstart', e => { if (!e.target.closest('#chart')) $('#tip').classList.remove('show'); }, {passive:true});
+  // 左右两头还有内容时边缘渐隐，提示可以继续滑
+  function chartEdges(){
+    const b = $('#chartScroll');
+    b.classList.toggle('l', b.scrollLeft > 2);
+    b.classList.toggle('r', b.scrollLeft < b.scrollWidth - b.clientWidth - 2);
+  }
+  (() => {
+    const b = $('#chartScroll');
+    b.addEventListener('scroll', () => { chartEdges(); $('#tip').classList.remove('show'); }, {passive:true});
+    // 电脑上按住鼠标左右拖
+    let sx = 0, sl = 0, on = false;
+    b.addEventListener('pointerdown', e => {
+      if (e.pointerType !== 'mouse' || !b.classList.contains('can') || e.button !== 0) return;
+      on = true; sx = e.clientX; sl = b.scrollLeft;
+    });
+    window.addEventListener('pointermove', e => {
+      if (!on) return;
+      if (Math.abs(e.clientX - sx) > 3) b.classList.add('drag');
+      b.scrollLeft = sl - (e.clientX - sx);
+    });
+    window.addEventListener('pointerup', () => { on = false; b.classList.remove('drag'); });
+  })();
 
   function renderFoot(){
     const d = S.data;
