@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>校园推广大使排行榜（评审版） · AsterFire Go</title>
 <meta name="theme-color" content="#1B2FD6">
-<script>window.__DEMO_ONLY__=true;window.__BOARD_SNAPSHOT__={"generated_at": "2026-11-24T22:28:40+08:00", "today": "2026-11-24", "campaign_title": "2026 秋季", "start_date": "2026-11-24", "periods": {}, "rules": {"reg_reward": 5, "feedback_reward": 15, "commission_rate": 0.1, "feedback_window_days": 7, "pay_window_days": 30, "levels": [{"key": "excellent", "name": "优秀", "regs": 50, "payers": 5}, {"key": "qualified", "name": "合格", "regs": 20, "payers": 2}, {"key": "improve", "name": "待提升", "regs": 10, "payers": 1}, {"key": "inactive", "name": "不活跃", "regs": 0, "payers": 0}]}, "visits_ok": true, "unregistered_regs": 0, "ambassadors": [{"code": "r1", "name": "林晓川", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r2", "name": "苏雨辰", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r3", "name": "许嘉禾", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r4", "name": "宋知远", "school": "", "link": "https://sidereus-ai.com/login"}], "stats": {}, "daily": {"dates": ["2026-11-24"], "series": {}}, "_meCode": "r3"};</script>
+<script>window.__DEMO_ONLY__=true;window.__BOARD_SNAPSHOT__={"generated_at": "2026-11-24T22:40:48+08:00", "today": "2026-11-24", "campaign_title": "2026 秋季", "start_date": "2026-11-24", "periods": {}, "rules": {"reg_reward": 5, "feedback_reward": 15, "commission_rate": 0.1, "feedback_window_days": 7, "pay_window_days": 30, "levels": [{"key": "excellent", "name": "优秀", "regs": 50, "payers": 5}, {"key": "qualified", "name": "合格", "regs": 20, "payers": 2}, {"key": "improve", "name": "待提升", "regs": 10, "payers": 1}, {"key": "inactive", "name": "不活跃", "regs": 0, "payers": 0}]}, "visits_ok": true, "unregistered_regs": 0, "ambassadors": [{"code": "r1", "name": "林晓川", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r2", "name": "苏雨辰", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r3", "name": "许嘉禾", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r4", "name": "宋知远", "school": "", "link": "https://sidereus-ai.com/login"}], "stats": {}, "daily": {"dates": ["2026-11-24"], "series": {}}, "_meCode": "r3"};</script>
 <style>
 /* 字号 11/12/13/14/16/20/30（标题 32）；字重 400/500/600；圆角 16/10/6 */
 :root{
@@ -146,7 +146,7 @@ main.wrap{position:relative;margin-top:-58px;padding-bottom:40px}
   box-shadow:0 12px 32px rgba(14,19,48,.12);z-index:25;opacity:0;transform:translateY(-4px);visibility:hidden;
   transition:opacity .18s var(--ease),transform .18s var(--ease),visibility 0s linear .18s}
 .combo.open .combo-list{opacity:1;transform:none;visibility:visible;transition:opacity .18s var(--ease),transform .18s var(--ease)}
-.combo-list.static{position:static;width:auto;max-height:240px;margin-top:6px;padding:0;border:0;box-shadow:none;opacity:1;transform:none;visibility:visible}
+.combo-list.static{position:static;width:auto;max-height:240px;margin-top:6px;padding:0;border:0;box-shadow:none;opacity:1;transform:none;visibility:inherit;transition:none}
 .opt{display:block;width:100%;padding:8px 10px;border:0;border-radius:8px;background:none;text-align:left;font:inherit;font-size:14px;color:var(--ink);cursor:pointer;transition:background .15s var(--ease)}
 .opt:hover,.opt.on{background:var(--brand-50)}
 .opt.cur{color:var(--brand)}
@@ -269,10 +269,11 @@ main.wrap{position:relative;margin-top:-58px;padding-bottom:40px}
 .more .btn[aria-expanded=true] svg{transform:rotate(180deg)}
 
 /* 趋势 */
-.mseg{margin-left:auto;display:inline-flex;gap:2px;padding:3px;border-radius:var(--r-md);background:var(--line-2)}
-.mseg button{border:0;background:none;padding:3px 10px;border-radius:var(--r-sm);font-size:12px;font-weight:500;color:var(--ink-3);cursor:pointer;transition:background .2s var(--ease),color .2s var(--ease),box-shadow .2s var(--ease)}
+.mseg{position:relative;margin-left:auto;display:inline-flex;gap:2px;padding:3px;border-radius:var(--r-md);background:var(--line-2)}
+.mseg button{position:relative;z-index:1;border:0;background:none;padding:3px 10px;border-radius:var(--r-sm);font-size:12px;font-weight:500;color:var(--ink-3);cursor:pointer;transition:background .2s var(--ease),color .2s var(--ease),box-shadow .2s var(--ease)}
 .mseg button:hover{color:var(--ink)}
-.mseg button[aria-pressed=true]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(14,19,48,.08)}
+.mseg button[aria-pressed=true]{color:var(--ink)}
+.mseg .thumb{position:absolute;top:3px;bottom:3px;left:0;border-radius:var(--r-sm);background:#fff;box-shadow:0 1px 2px rgba(14,19,48,.08);transition:transform .32s var(--ease),width .32s var(--ease)}
 .mseg button:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
 .chart-wrap{padding:8px 24px 20px;position:relative}
 .legend{display:flex;justify-content:flex-end;gap:14px;font-size:12px;color:var(--ink-2);height:18px;margin-bottom:2px}
@@ -482,7 +483,7 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
 
   <section class="card" id="trendCard">
     <div class="card-h"><h2 id="chartTitle">每日有效拉新 · 人</h2>
-      <div class="mseg" id="mseg" role="group" aria-label="图表指标"><button data-m="regs">拉新</button><button data-m="feedback">反馈</button><button data-m="payers">付费</button><button data-m="earnings">收益</button></div></div>
+      <div class="mseg" id="mseg" role="group" aria-label="图表指标"><span class="thumb" aria-hidden="true"></span><button data-m="regs">拉新</button><button data-m="feedback">反馈</button><button data-m="payers">付费</button><button data-m="earnings">收益</button></div></div>
     <div class="chart-wrap" id="chartWrap">
       <div class="legend" id="legend"></div>
       <svg class="chart" id="chart" role="img" aria-label="每日有效拉新人数"></svg>
@@ -944,6 +945,14 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
     $('#chartTitle').textContent = `每日${cm.label} · ${cm.unit}`;
     svg.setAttribute('aria-label', `每日${cm.label}`);
     $$('#mseg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.m === S.chart));
+    const mseg = $('#mseg'), mb = mseg.querySelector(`[data-m="${S.chart}"]`), mt = mseg.querySelector('.thumb');
+    if (mb.offsetWidth) {
+      const br = mb.getBoundingClientRect(), sr = mseg.getBoundingClientRect(), first = !mt.style.width;
+      if (first) mt.style.transition = 'none';   // 第一次直接放到位，不从左边滑进来
+      mt.style.width = br.width + 'px';
+      mt.style.transform = `translateX(${br.left - sr.left - mseg.clientLeft}px)`;
+      if (first) { mt.offsetWidth; mt.style.transition = ''; }
+    }
     $('#legend').innerHTML = hasMe ? `<span><i style="background:#2F4AF1"></i>我</span>${n > 1 ? '<span><i class="line"></i>大使人均</span>' : ''}` : `<span><i style="background:#2F4AF1"></i>全体大使</span>`;
     const tip = $('#tip'), wrap = $('#chartWrap');
     let hideT;
