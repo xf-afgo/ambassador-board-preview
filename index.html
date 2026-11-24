@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>校园推广大使排行榜（评审版） · AsterFire Go</title>
 <meta name="theme-color" content="#1B2FD6">
-<script>window.__DEMO_ONLY__=true;window.__BOARD_SNAPSHOT__={"generated_at": "2026-11-24T21:42:07+08:00", "today": "2026-11-24", "campaign_title": "2026 秋季", "start_date": "2026-11-24", "periods": {}, "rules": {"reg_reward": 5, "feedback_reward": 15, "commission_rate": 0.1, "feedback_window_days": 7, "pay_window_days": 30, "levels": [{"key": "excellent", "name": "优秀", "regs": 50, "payers": 5}, {"key": "qualified", "name": "合格", "regs": 20, "payers": 2}, {"key": "improve", "name": "待提升", "regs": 10, "payers": 1}, {"key": "inactive", "name": "不活跃", "regs": 0, "payers": 0}]}, "visits_ok": true, "unregistered_regs": 0, "ambassadors": [{"code": "r1", "name": "林晓川", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r2", "name": "苏雨辰", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r3", "name": "许嘉禾", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r4", "name": "宋知远", "school": "", "link": "https://sidereus-ai.com/login"}], "stats": {}, "daily": {"dates": ["2026-11-24"], "series": {}}, "_meCode": "r3"};</script>
+<script>window.__DEMO_ONLY__=true;window.__BOARD_SNAPSHOT__={"generated_at": "2026-11-24T21:57:53+08:00", "today": "2026-11-24", "campaign_title": "2026 秋季", "start_date": "2026-11-24", "periods": {}, "rules": {"reg_reward": 5, "feedback_reward": 15, "commission_rate": 0.1, "feedback_window_days": 7, "pay_window_days": 30, "levels": [{"key": "excellent", "name": "优秀", "regs": 50, "payers": 5}, {"key": "qualified", "name": "合格", "regs": 20, "payers": 2}, {"key": "improve", "name": "待提升", "regs": 10, "payers": 1}, {"key": "inactive", "name": "不活跃", "regs": 0, "payers": 0}]}, "visits_ok": true, "unregistered_regs": 0, "ambassadors": [{"code": "r1", "name": "林晓川", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r2", "name": "苏雨辰", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r3", "name": "许嘉禾", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r4", "name": "宋知远", "school": "", "link": "https://sidereus-ai.com/login"}], "stats": {}, "daily": {"dates": ["2026-11-24"], "series": {}}, "_meCode": "r3"};</script>
 <style>
 /* 字号 11/12/13/14/16/20/30（标题 32）；字重 400/500/600；圆角 16/10/6 */
 :root{
@@ -43,6 +43,7 @@ button,select{font:inherit;color:inherit}
 .demo-tg{margin-left:auto;display:inline-flex;white-space:nowrap;flex:none;align-items:center;gap:6px;height:28px;padding:0 10px 0 6px;border:1px solid var(--line);border-radius:99px;background:#fff;
   font-size:12px;color:var(--ink-2);cursor:pointer;transition:border-color .2s var(--ease),color .2s var(--ease),background .2s var(--ease)}
 .demo-tg:hover{border-color:var(--brand-200)}
+.demo-tg[aria-pressed=true]:hover{border-color:var(--brand)}
 .demo-tg:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 .demo-tg .sw{position:relative;width:24px;height:14px;border-radius:99px;background:var(--ink-4);transition:background .25s var(--ease)}
 .demo-tg .sw::after{content:"";position:absolute;top:2px;left:2px;width:10px;height:10px;border-radius:50%;background:#fff;transition:transform .25s var(--ease)}
@@ -50,7 +51,7 @@ button,select{font:inherit;color:inherit}
 .demo-tg[aria-pressed=true] .sw{background:var(--brand)}
 .demo-tg[aria-pressed=true] .sw::after{transform:translateX(10px)}
 .demo-tg:not([hidden])+.fresh{margin-left:14px}
-.refresh{width:28px;height:28px;margin:0 -6px 0 -6px;border:0;border-radius:50%;background:none;color:var(--ink-3);display:grid;place-items:center;cursor:pointer;
+.refresh{width:28px;height:28px;margin:0 -6.5px;border:0;border-radius:50%;background:none;color:var(--ink-3);display:grid;place-items:center;cursor:pointer;
   transition:background .2s var(--ease),color .2s var(--ease)}
 .refresh:hover{background:var(--line-2);color:var(--ink)}
 .refresh:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
@@ -90,12 +91,14 @@ button,select{font:inherit;color:inherit}
   background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);backdrop-filter:blur(8px)}
 .seg button{position:relative;z-index:1;border:0;background:none;padding:7px 18px;border-radius:var(--r-sm);cursor:pointer;color:rgba(255,255,255,.85);
   font-size:14px;font-weight:500;white-space:nowrap;transition:color .25s var(--ease)}
+.seg button:not([aria-pressed=true]):hover{color:#fff}
 .seg button[aria-pressed=true]{color:var(--brand-ink)}
 .seg button:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .seg .thumb{position:absolute;top:4px;bottom:4px;left:4px;border-radius:var(--r-sm);background:#fff;
   transition:transform .38s var(--ease),width .38s var(--ease)}
 .seg.light{background:var(--line-2);box-shadow:none;backdrop-filter:none}
 .seg.light button{color:var(--ink-2);padding:5px 14px;font-size:13px}
+.seg.light button:not([aria-pressed=true]):hover{color:var(--ink)}
 .seg.light button[aria-pressed=true]{color:#fff}
 .seg.light .thumb{background:var(--brand)}
 .seg.light button:focus-visible{outline-color:var(--brand)}
@@ -127,7 +130,7 @@ main.wrap{position:relative;margin-top:-58px;padding-bottom:40px}
 .picker svg{color:var(--ink-3)}
 .picker:hover svg{color:var(--ink)}
 .picker:focus-within{outline:2px solid var(--brand-200);outline-offset:3px}
-.me-actions{margin-left:auto;display:flex;align-items:center;gap:20px}
+.me-actions{margin-left:auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .ranks{display:grid;grid-template-columns:repeat(4,44px);column-gap:6px}
 .ranks div{display:flex;flex-direction:column;align-items:center;line-height:1.2}
 .ranks span{font-size:12px;color:var(--ink-3)}
@@ -173,7 +176,7 @@ main.wrap{position:relative;margin-top:-58px;padding-bottom:40px}
 .lv-body{display:flex;align-items:center;gap:0 32px;flex-wrap:wrap}
 .lanes{flex:1 1 420px;max-width:640px}
 .lane{display:grid;grid-template-columns:88px 1fr;align-items:center;gap:12px}
-.lane .lk{font-size:12px;color:var(--ink-2);white-space:nowrap}
+.lane .lk{font-size:12px;color:var(--ink-2);white-space:nowrap;margin-bottom:3px}
 .lane .lk b{font-family:var(--num);color:var(--ink);font-size:14px;font-weight:600;margin-left:4px}
 .track{position:relative;height:8px;border-radius:99px;background:var(--line-2);margin:22px 0 26px}
 .track.thin{height:6px}
@@ -251,8 +254,9 @@ main.wrap{position:relative;margin-top:-58px;padding-bottom:40px}
 .mseg button:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
 .chart-wrap{padding:8px 24px 20px;position:relative}
 .legend{display:flex;justify-content:flex-end;gap:14px;font-size:12px;color:var(--ink-2);height:18px;margin-bottom:2px}
-.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
-.legend i.line{height:0;border-top:2px dashed var(--ink-3);border-radius:0;width:14px;vertical-align:3px}
+.legend span{display:inline-flex;align-items:center}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+.legend i.line{height:0;border-top:2px dashed var(--ink-3);border-radius:0;width:14px}
 svg.chart{display:block;width:100%;height:200px;overflow:visible}
 svg.chart text{font-size:11px;fill:var(--ink-3);font-family:var(--num)}
 .tip{position:absolute;pointer-events:none;background:var(--ink);color:#fff;border-radius:var(--r-md);padding:7px 10px;font-size:12px;line-height:1.6;left:0;top:0;
@@ -261,7 +265,9 @@ svg.chart text{font-size:11px;fill:var(--ink-3);font-family:var(--num)}
 .tip b{font-family:var(--num)}
 
 /* 规则 */
-.fold-btn{width:100%;display:flex;align-items:center;gap:6px 12px;padding:18px 24px;border:0;background:none;cursor:pointer;text-align:left;border-radius:var(--r-lg);flex-wrap:wrap}
+.fold-btn{width:100%;display:flex;align-items:center;gap:6px 12px;padding:18px 24px;border:0;background:none;cursor:pointer;text-align:left;border-radius:var(--r-lg);flex-wrap:wrap;transition:background .2s var(--ease)}
+.fold-btn:hover{background:#FAFBFF}
+.fold-btn:hover svg{color:var(--ink)}
 .fold-btn h2{margin:0;font-size:16px;font-weight:600}
 .fold-btn .aside{color:var(--ink-2);font-size:13px;flex:1;min-width:200px}
 .fold-btn .aside b{color:var(--brand-ink);font-weight:600}
@@ -364,6 +370,7 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
   .rules{padding:0 16px 18px}
   .choose{padding:18px 16px}
 }
+@media (max-width:400px){.ranks{grid-template-columns:repeat(4,auto);column-gap:6px}.me-actions{gap:8px}}
 @media (max-width:380px){.demo-tg{padding:0 5px}.demo-tg span:last-child::before{content:none}.demo-tg:not([hidden])+.fresh{margin-left:8px}}
 @media (max-width:340px){.demo-tg{display:none}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
@@ -600,15 +607,16 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
       const btn = seg.querySelector(`[data-p="${S.period}"]`), th = seg.querySelector('.thumb');
       seg.querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b === btn));
       if (!btn.offsetWidth) return;
-      th.style.width = btn.offsetWidth + 'px';
-      th.style.transform = `translateX(${btn.offsetLeft - 4}px)`;
+      const br = btn.getBoundingClientRect(), sr = seg.getBoundingClientRect();
+      th.style.width = br.width + 'px';
+      th.style.transform = `translateX(${br.left - sr.left - 4 - seg.clientLeft}px)`;
     });
   }
   function placeBar(){
     const tabs = $('#tabs'), btn = tabs.querySelector(`[data-b="${S.board}"]`), bar = tabs.querySelector('.bar');
     tabs.querySelectorAll('[role=tab]').forEach(b => { b.setAttribute('aria-selected', b === btn); b.tabIndex = b === btn ? 0 : -1; });
-    bar.style.width = btn.offsetWidth + 'px';
-    bar.style.transform = `translateX(${btn.offsetLeft}px)`;
+    bar.style.width = (btn.getBoundingClientRect().width - 8) + 'px';
+    bar.style.transform = `translateX(${btn.offsetLeft + 4}px)`;
   }
 
   /* ---------- 我的成绩 ---------- */
@@ -813,7 +821,7 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
   }
   function renderChart(){
     const d = S.data, svg = $('#chart'), W = svg.clientWidth || 800, H = 200;
-    const pad = {l:30, r:6, t:14, b:24};   // l 在算出刻度后按数字宽度重设
+    const pad = {l:30, r:0, t:14, b:24};   // l 在算出刻度后按数字宽度重设
     const dates = d.daily.dates, codes = d.ambassadors.map(a => a.code), n = codes.length;
     const narrow = W < 560, maxSlots = narrow ? 14 : 30;
     const hasMe = !!(S.me && d.daily.series[S.me]);
@@ -832,7 +840,7 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
     const nice = niceMax(Math.max(0, ...vals));
     const ctx = (renderChart.c = renderChart.c || document.createElement('canvas')).getContext('2d');
     ctx.font = `11px ${getComputedStyle(document.documentElement).getPropertyValue('--num')}`;
-    pad.l = Math.ceil(Math.max(...[0, nice / 2, nice].map(v => ctx.measureText(fmtInt(v)).width))) + 8;
+    pad.l = Math.max(...[0, nice / 2, nice].map(v => ctx.measureText(fmtInt(v)).width)) + 8;
     const iw = W - pad.l - pad.r, ih = H - pad.t - pad.b, bw = iw / all.length, barW = Math.max(4, Math.min(26, bw * .6));
     const y = v => pad.t + ih - v / nice * ih;
     let g = '';
