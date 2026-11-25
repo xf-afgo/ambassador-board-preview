@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>校园推广大使排行榜（评审版） · AsterFire Go</title>
 <meta name="theme-color" content="#1B2FD6">
-<script>window.__DEMO_ONLY__=true;window.__BOARD_SNAPSHOT__={"generated_at": "2026-11-25T10:58:22+08:00", "today": "2026-11-25", "campaign_title": "2026 秋季", "start_date": "2026-11-25", "periods": {}, "rules": {"reg_reward": 5, "feedback_reward": 15, "commission_rate": 0.1, "feedback_window_days": 7, "pay_window_days": 30, "levels": [{"key": "excellent", "name": "优秀", "regs": 50, "payers": 5}, {"key": "qualified", "name": "合格", "regs": 20, "payers": 2}, {"key": "improve", "name": "待提升", "regs": 10, "payers": 1}, {"key": "inactive", "name": "不活跃", "regs": 0, "payers": 0}]}, "visits_ok": true, "unregistered_regs": 0, "ambassadors": [{"code": "r1", "name": "林晓川", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r2", "name": "苏雨辰", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r3", "name": "许嘉禾", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r4", "name": "宋知远", "school": "", "link": "https://sidereus-ai.com/login"}], "stats": {}, "daily": {"dates": ["2026-11-25"], "series": {}}, "_meCode": "r3"};</script>
+<script>window.__DEMO_ONLY__=true;window.__BOARD_SNAPSHOT__={"generated_at": "2026-11-25T11:25:22+08:00", "today": "2026-11-25", "campaign_title": "2026 秋季", "start_date": "2026-11-25", "periods": {}, "rules": {"reg_reward": 5, "feedback_reward": 15, "commission_rate": 0.1, "feedback_window_days": 7, "pay_window_days": 30, "levels": [{"key": "excellent", "name": "优秀", "regs": 50, "payers": 5}, {"key": "qualified", "name": "合格", "regs": 20, "payers": 2}, {"key": "improve", "name": "待提升", "regs": 10, "payers": 1}, {"key": "inactive", "name": "不活跃", "regs": 0, "payers": 0}]}, "visits_ok": true, "unregistered_regs": 0, "ambassadors": [{"code": "r1", "name": "林晓川", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r2", "name": "苏雨辰", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r3", "name": "许嘉禾", "school": "", "link": "https://sidereus-ai.com/login"}, {"code": "r4", "name": "宋知远", "school": "", "link": "https://sidereus-ai.com/login"}], "stats": {}, "daily": {"dates": ["2026-11-25"], "series": {}}, "_meCode": "r3"};</script>
 <style>
 /* 字号 11/12/13/14/16/20/30（标题 32）；字重 400/500/600；圆角 16/10/6 */
 :root{
@@ -176,6 +176,15 @@ main.wrap{position:relative;margin-top:-58px;padding-bottom:40px}
 .tile{padding:16px 18px 15px;position:relative;min-width:0;border-left:1px solid var(--line)}
 .tile:first-child{border-left:0}
 .tile .k{font-size:13px;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+.qm{flex:none;width:16px;height:16px;padding:0;border:0;background:none;color:var(--ink-4);cursor:help;display:inline-grid;place-items:center;position:relative;border-radius:50%;transition:color .15s var(--ease)}
+.qm::after{content:"";position:absolute;inset:-6px}
+.qm svg{width:14px;height:14px;display:block}
+.qm:hover,.qm.on{color:var(--ink-2)}
+.qm:focus-visible{outline:2px solid var(--brand);outline-offset:1px}
+.qpop{position:fixed;left:0;top:0;z-index:60;max-width:min(282px,calc(100vw - 16px));pointer-events:none;background:var(--ink);color:#fff;border-radius:var(--r-md);padding:8px 11px;font-size:12px;line-height:1.65;
+  opacity:0;transform:translateY(4px);transition:opacity .15s var(--ease),transform .15s var(--ease)}
+.qpop.show{opacity:1;transform:none}
+.qpop span{display:block;color:#C9CDE0}
 .tile .k .pend{font-size:11px;color:var(--warn);background:var(--warn-bg);border-radius:var(--r-sm);padding:0 5px;line-height:18px;position:relative;top:-1px}
 .tile .v{margin-top:6px;font-size:30px;line-height:1.05;font-weight:600;white-space:nowrap}
 .tile .v small{font-size:13px;font-weight:400;color:var(--ink-3);margin-left:3px;font-family:inherit}
@@ -562,6 +571,7 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
   <div class="row2"><button class="btn" id="sheetClose" style="min-width:88px">好的</button></div>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="qpop" id="qpop" role="tooltip"></div>
 
 <script>
 (() => {
@@ -599,6 +609,50 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
   if (!['week','month','all'].includes(S.period)) S.period = 'month';
   if (!BOARDS.some(b => b.key === S.board)) S.board = 'regs';
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ICON_Q = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="8" cy="8" r="6.4"/><path d="M6.2 6.3a1.85 1.85 0 0 1 3.6.55c0 1.25-1.8 1.6-1.8 2.65"/><circle cx="8" cy="11.6" r=".35" fill="currentColor"/></svg>';
+  // 五个格子的指标定义：悬停、键盘聚焦或手机上点按问号时浮出
+  function qText(key){
+    const R = (S.data && S.data.rules) || {reg_reward:5, feedback_reward:15, commission_rate:.1};
+    return {
+      regs: '点你的专属链接后，在同一页面完成注册的人数<span>访问：点开链接的设备数<br>体验：注册 7 天内发起过任务的人数</span>',
+      feedback: '注册 7 天内发起过任务，并提交了反馈问卷的人数<span>只交问卷、没发起任务的不计入</span>',
+      payers: '注册 30 天内有过线上充值的人数',
+      recharge: '你带来的用户注册 30 天内的线上实付金额合计',
+      earnings: `拉新 ¥${R.reg_reward}/人 + 问卷 ¥${R.feedback_reward}/人 + 充值金额 × ${Math.round(R.commission_rate * 100)}%<span>每月核验后结算，以官方结算为准</span>`,
+    }[key];
+  }
+  let qOn = null, qPtr = 'mouse';
+  function showQ(btn){
+    const pop = $('#qpop');
+    if (qOn && qOn !== btn) qOn.classList.remove('on');
+    qOn = btn; btn.classList.add('on');
+    pop.innerHTML = qText(btn.dataset.q);
+    const b = btn.getBoundingClientRect(), vw = document.documentElement.clientWidth;
+    let left = b.left + b.width / 2 - 18;
+    left = Math.max(8, Math.min(left, vw - pop.offsetWidth - 8));
+    let top = b.top - pop.offsetHeight - 8;
+    if (top < 8) top = b.bottom + 8;
+    pop.style.left = left + 'px'; pop.style.top = top + 'px';
+    pop.classList.add('show');
+  }
+  function hideQ(){
+    if (!qOn) return;
+    qOn.classList.remove('on'); qOn = null;
+    $('#qpop').classList.remove('show');
+  }
+  document.addEventListener('pointerdown', e => { qPtr = e.pointerType || 'mouse'; }, true);
+  document.addEventListener('pointerover', e => { const b = e.target.closest && e.target.closest('.qm'); if (b && e.pointerType === 'mouse') showQ(b); });
+  document.addEventListener('pointerout', e => { const b = e.target.closest && e.target.closest('.qm'); if (b && e.pointerType === 'mouse' && !b.contains(e.relatedTarget)) hideQ(); });
+  document.addEventListener('focusin', e => { const b = e.target.closest && e.target.closest('.qm'); if (b && b.matches(':focus-visible')) showQ(b); });
+  document.addEventListener('focusout', e => { if (e.target.closest && e.target.closest('.qm')) hideQ(); });
+  document.addEventListener('click', e => {
+    const b = e.target.closest && e.target.closest('.qm');
+    if (!b) { hideQ(); return; }
+    if (qPtr !== 'mouse' && qOn === b) hideQ(); else showQ(b);
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') hideQ(); });
+  window.addEventListener('scroll', hideQ, {passive:true});
+  window.addEventListener('resize', hideQ);
 
   /* ---------- 格式 ---------- */
   const fmtInt = n => Math.round(n).toLocaleString('zh-CN');
@@ -743,7 +797,7 @@ footer:empty{padding:0 0 env(safe-area-inset-bottom)}
         </div>
       </div>
       <div class="tiles fade-in">
-        ${COLS.map(c => `<div class="tile${c.key === 'earnings' ? ' hl' : ''}"><div class="k">${c.label}${c.key === 'earnings' ? '<span class="pend">待核验</span>' : ''}</div>
+        ${COLS.map(c => `<div class="tile${c.key === 'earnings' ? ' hl' : ''}"><div class="k">${c.label}<button class="qm" type="button" data-q="${c.key}" aria-label="${c.label}是怎么算的">${ICON_Q}</button>${c.key === 'earnings' ? '<span class="pend">待核验</span>' : ''}</div>
           <div class="v num">${c.money ? '<span class="cur">¥</span>' : ''}<span data-v="${c.key}">0</span>${c.money ? '' : '<small>人</small>'}</div>
           <div class="d" data-d="${c.key}">&nbsp;</div></div>`).join('')}
       </div>
